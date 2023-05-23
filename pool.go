@@ -5,26 +5,6 @@ import (
 	"golang.org/x/text/language"
 )
 
-const (
-	DexAstroport     = "Astroport"
-	DexTerraswap     = "Terraswap"
-	DexTfm           = "TFM"
-	DexPhoenix       = "Phoenix"
-	DexWhiteWhale    = "White Whale"
-	DexOsmosis       = "Osmosis"
-	DexFortis        = "Fortis"
-	DexLoop          = "Loop"
-	DexMarbleFinance = "MarbleFinance"
-	DexWynd          = "Wynd"
-	DexJunoSwap      = "Junoswap"
-	DexFin           = "FIN"
-
-	TypeXyk        = "xyk"
-	TypeStable     = "stable"
-	TypeOrderbook  = "orderbook"
-	TypeBalancerV1 = "balancerV1"
-)
-
 type Pool struct {
 	Id        string   `json:"id" binding:"required"`
 	AssetIds  []string `json:"asset_ids" binding:"required,gte=2"`

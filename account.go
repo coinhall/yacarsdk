@@ -1,12 +1,6 @@
 package yacarsdk
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-
 	"golang.org/x/text/collate"
 	"golang.org/x/text/language"
 )
@@ -48,33 +42,4 @@ func (acc ByEnforcedAccountOrder) Less(i, j int) bool {
 	}
 
 	return false
-}
-
-func GetAccounts(ctx context.Context, httpClient *http.Client, chain string) ([]Account, error) {
-	url := fmt.Sprintf("https://raw.githubusercontent.com/coinhall/yacar/main/%s/account.json", chain)
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	b, err := io.ReadAll(resp.Body)
-	defer resp.Body.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	var accounts []Account
-	if err := json.Unmarshal(b, &accounts); err != nil {
-		return nil, err
-	}
-
-	return accounts, nil
 }

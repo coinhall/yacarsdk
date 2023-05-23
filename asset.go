@@ -5,21 +5,13 @@ import (
 	"golang.org/x/text/language"
 )
 
-const (
-	AssetTypeNative       = "native"
-	AssetTypeIBC          = "ibc"
-	AssetTypeCW20         = "cw20"
-	AssetTypeCW721        = "cw721"
-	AssetTypeTokenFactory = "tokenfactory"
-)
-
 type Asset struct {
-	Id             string `json:"id" binding:"required"`
+	Id             string `json:"id"`
 	Entity         string `json:"entity,omitempty"`
-	Name           string `json:"name" binding:"required"`
-	Symbol         string `json:"symbol" binding:"required"`
-	Decimals       string `json:"decimals" binding:"required"`
-	Type           string `json:"type" binding:"required"`
+	Name           string `json:"name"`
+	Symbol         string `json:"symbol"`
+	Decimals       string `json:"decimals"`
+	Type           string `json:"type"`
 	CircSupplyAPI  string `json:"circ_supply_api,omitempty"`
 	TotalSupplyAPI string `json:"total_supply_api,omitempty"`
 	Icon           string `json:"icon,omitempty"`
