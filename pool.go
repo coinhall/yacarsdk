@@ -6,10 +6,10 @@ import (
 )
 
 type Pool struct {
-	Id        string   `json:"id" binding:"required"`
-	AssetIds  []string `json:"asset_ids" binding:"required,gte=2"`
-	Dex       string   `json:"dex" binding:"required"`
-	Type      string   `json:"type" binding:"required"`
+	Id        string   `json:"id"`
+	AssetIds  []string `json:"asset_ids"`
+	Dex       string   `json:"dex"`
+	Type      string   `json:"type"`
 	LpTokenId string   `json:"lp_token_id,omitempty"`
 }
 
