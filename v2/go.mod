@@ -1,4 +1,4 @@
-module github.com/coinhall/yacarsdk
+module github.com/coinhall/yacarsdk/v2
 
 go 1.20
 
