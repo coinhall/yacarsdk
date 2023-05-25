@@ -17,6 +17,7 @@ type Asset struct {
 	Icon           string `json:"icon,omitempty"`
 	CoinMarketCap  string `json:"coinmarketcap,omitempty"`
 	CoinGecko      string `json:"coingecko,omitempty"`
+	VerificationTx string `json:"verification_tx,omitempty"`
 }
 
 func (a Asset) IsMinimallyPopulated() bool {
