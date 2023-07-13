@@ -12,7 +12,9 @@ type Asset struct {
 	Symbol         string `json:"symbol"`
 	Decimals       string `json:"decimals"`
 	Type           string `json:"type"`
+	CircSupply     string `json:"circ_supply,omitempty"`
 	CircSupplyAPI  string `json:"circ_supply_api,omitempty"`
+	TotalSupply    string `json:"total_supply,omitempty"`
 	TotalSupplyAPI string `json:"total_supply_api,omitempty"`
 	Icon           string `json:"icon,omitempty"`
 	CoinMarketCap  string `json:"coinmarketcap,omitempty"`
