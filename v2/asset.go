@@ -36,47 +36,9 @@ func (assets ByEnforcedAssetOrder) Less(i, j int) bool {
 	a := assets[i]
 	b := assets[j]
 
-	// Assets with entity come first
-	if len(a.Entity) > 0 && len(b.Entity) == 0 {
-		return true
-	}
-	if len(a.Entity) == 0 && len(b.Entity) > 0 {
-		return false
-	}
-
-	// If both assets have entity, compare by
-	// 1. Entity
-	// 2. Name
-	// 3. Id
-	if len(a.Entity) > 0 && len(b.Entity) > 0 {
-		if c := collator.CompareString(a.Entity, b.Entity); c != 0 {
-			return c < 0
-		}
-
-		if c := collator.CompareString(a.Name, b.Name); c != 0 {
-			return c < 0
-		}
-
-		if c := collator.CompareString(a.Id, b.Id); c != 0 {
-			return c < 0
-		}
-
-		return false
-	}
-
-	// If both assets don't have entity, compare by
-	// 1. Name
-	// 2. Id
-	if len(a.Entity) == 0 && len(b.Entity) == 0 {
-		if c := collator.CompareString(a.Name, b.Name); c != 0 {
-			return c < 0
-		}
-
-		if c := collator.CompareString(a.Id, b.Id); c != 0 {
-			return c < 0
-		}
-
-		return false
+	// Compare by ID only
+	if c := collator.CompareString(a.Id, b.Id); c != 0 {
+		return c < 0
 	}
 
 	return false
