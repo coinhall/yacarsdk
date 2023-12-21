@@ -1,6 +1,7 @@
 package yacarsdk
 
 import (
+	"encoding/hex"
 	"fmt"
 	"strconv"
 )
@@ -94,15 +95,21 @@ func ValidateAssets(assets []Asset, entities []Entity) error {
 	}
 
 	// Non-permissioned DEX TxHash must be unique
-	permissionedDex := map[string]struct{}{
-		"osmosis-main": {},
-		"kujira-fin":   {},
-	}
 	txCheck := make(map[string]struct{})
 	for _, asset := range assets {
-		// If asset is from a permissioned DEX or is empty, skip
-		if _, ok := permissionedDex[asset.VerificationTx]; ok || asset.VerificationTx == "" {
+		if asset.VerificationTx == "" {
 			continue
+		}
+
+		bz, err := hex.DecodeString(asset.VerificationTx)
+		if err != nil {
+			// Assume is permissioned DEX, no need to check
+			continue
+		}
+
+		if len(bz) != 32 {
+			// Tx hash should be 32 bytes long
+			return fmt.Errorf("invalid asset tx hash: %s", asset.Id)
 		}
 
 		if _, ok := txCheck[asset.VerificationTx]; ok {
