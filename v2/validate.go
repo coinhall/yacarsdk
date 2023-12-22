@@ -159,7 +159,7 @@ func ValidateContracts(contracts []Contract) (int, error) {
 	return -1, nil
 }
 
-func ValidateEntities(entities []Entity) (int, error) {
+func ValidateEntities(entities []Entity, usedEntities map[string]struct{}) (int, error) {
 	for i, entity := range entities {
 		if !entity.IsMinimallyPopulated() {
 			return i, fmt.Errorf("entity name %s is not minimally populated", entity.Name)
@@ -173,6 +173,12 @@ func ValidateEntities(entities []Entity) (int, error) {
 		}
 
 		entityCount[entity.Name] = struct{}{}
+	}
+
+	for i, entity := range entities {
+		if _, ok := usedEntities[entity.Name]; !ok {
+			return i, fmt.Errorf("unused entity: %s", entity.Name)
+		}
 	}
 
 	return -1, nil
