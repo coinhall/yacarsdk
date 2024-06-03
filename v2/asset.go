@@ -8,10 +8,10 @@ import (
 type Asset struct {
 	Id             string `json:"id"`
 	Entity         string `json:"entity,omitempty"`
-	Name           string `json:"name"`
-	Symbol         string `json:"symbol"`
-	Decimals       string `json:"decimals"`
-	Type           string `json:"type"`
+	Name           string `json:"name,omitempty"`
+	Symbol         string `json:"symbol,omitempty"`
+	Decimals       string `json:"decimals,omitempty"`
+	Type           string `json:"type,omitempty"`
 	CircSupply     string `json:"circ_supply,omitempty"`
 	CircSupplyAPI  string `json:"circ_supply_api,omitempty"`
 	TotalSupply    string `json:"total_supply,omitempty"`
@@ -20,6 +20,7 @@ type Asset struct {
 	CoinMarketCap  string `json:"coinmarketcap,omitempty"`
 	CoinGecko      string `json:"coingecko,omitempty"`
 	VerificationTx string `json:"verification_tx,omitempty"`
+	OriginChainId  string `json:"origin_chain_id,omitempty"`
 }
 
 func (a Asset) IsMinimallyPopulated() bool {
