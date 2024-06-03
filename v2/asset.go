@@ -1,6 +1,8 @@
 package yacarsdk
 
 import (
+	"strings"
+
 	"golang.org/x/text/collate"
 	"golang.org/x/text/language"
 )
@@ -21,6 +23,10 @@ type Asset struct {
 	CoinGecko      string `json:"coingecko,omitempty"`
 	VerificationTx string `json:"verification_tx,omitempty"`
 	OriginChainId  string `json:"origin_chain_id,omitempty"`
+}
+
+func (a Asset) IsMinimallyPopulatedIBC() bool {
+	return strings.HasPrefix("ibc/", a.Id) && len(a.OriginChainId) > 0
 }
 
 func (a Asset) IsMinimallyPopulated() bool {

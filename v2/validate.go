@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 func ValidateAccounts(accounts []Account) (int, error) {
@@ -27,6 +28,16 @@ func ValidateAccounts(accounts []Account) (int, error) {
 
 func ValidateAssets(assets []Asset, entities []Entity) (int, error) {
 	for i, asset := range assets {
+		// IBC asset check
+		if strings.HasPrefix(asset.Id, "ibc/") {
+			if !asset.IsMinimallyPopulatedIBC() {
+				return i, fmt.Errorf("IBC asset ID %s is not minimally populated", asset.Id)
+			}
+
+			continue
+		}
+
+		// CW20 asset check
 		if !asset.IsMinimallyPopulated() {
 			return i, fmt.Errorf("asset ID %s is not minimally populated", asset.Id)
 		}
