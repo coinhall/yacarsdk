@@ -28,16 +28,19 @@ func ValidateAccounts(accounts []Account) (int, error) {
 
 func ValidateAssets(assets []Asset, entities []Entity) (int, error) {
 	for i, asset := range assets {
-		// IBC asset check
+		// IBC assets check
 		if strings.HasPrefix(asset.Id, "ibc/") {
-			if !asset.IsMinimallyPopulatedIBC() {
+			if !asset.IsMinimallyPopulatedIbc() {
 				return i, fmt.Errorf("IBC asset ID %s is not minimally populated", asset.Id)
 			}
 
+			if !asset.IbcDoesNotContain() {
+				return i, fmt.Errorf("IBC asset ID %s contains invalid fields", asset.Id)
+			}
 			continue
 		}
 
-		// CW20 asset check
+		// Other assets check
 		if !asset.IsMinimallyPopulated() {
 			return i, fmt.Errorf("asset ID %s is not minimally populated", asset.Id)
 		}

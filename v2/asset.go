@@ -22,15 +22,35 @@ type Asset struct {
 	CoinMarketCap  string `json:"coinmarketcap,omitempty"`
 	CoinGecko      string `json:"coingecko,omitempty"`
 	VerificationTx string `json:"verification_tx,omitempty"`
-	OriginChainId  string `json:"origin_chain_id,omitempty"`
+	OriginChainId  string `json:"origin_chain_id,omitempty"` // IBC asset only
 }
 
-func (a Asset) IsMinimallyPopulatedIBC() bool {
+// IBC assets should maximally have the following fields:
+//   - Id
+//   - OriginChainId
+//   - Entity (optional)
+func (a Asset) IsMinimallyPopulatedIbc() bool {
 	return strings.HasPrefix("ibc/", a.Id) && len(a.OriginChainId) > 0
 }
 
+func (a Asset) IbcDoesNotContain() bool {
+	return strings.HasPrefix("ibc/", a.Id) &&
+		len(a.Name) == 0 &&
+		len(a.Symbol) == 0 &&
+		len(a.Decimals) == 0 &&
+		len(a.Type) == 0 &&
+		len(a.CircSupply) == 0 &&
+		len(a.CircSupplyAPI) == 0 &&
+		len(a.TotalSupply) == 0 &&
+		len(a.TotalSupplyAPI) == 0 &&
+		len(a.Icon) == 0 &&
+		len(a.CoinMarketCap) == 0 &&
+		len(a.CoinGecko) == 0 &&
+		len(a.VerificationTx) == 0
+}
+
 func (a Asset) IsMinimallyPopulated() bool {
-	return len(a.Id) > 0 && len(a.Name) > 0 && len(a.Symbol) > 0 && len(a.Decimals) > 0 && len(a.Type) > 0
+	return len(a.Id) > 0 && len(a.Name) > 0 && len(a.Symbol) > 0 && len(a.Decimals) > 0 && len(a.Type) > 0 && len(a.OriginChainId) == 0
 }
 
 type ByEnforcedAssetOrder []Asset
