@@ -6,22 +6,22 @@ import (
 )
 
 type Asset struct {
-	Id             string `json:"id"`
-	OriginChainId  string `json:"origin_chain_id,omitempty"` // Only for IBC assets
-	OriginId       string `json:"origin_id,omitempty"`       // Only for IBC assets
-	Entity         string `json:"entity,omitempty"`
-	Name           string `json:"name,omitempty"`
-	Symbol         string `json:"symbol,omitempty"`
-	Decimals       string `json:"decimals,omitempty"`
-	Type           string `json:"type,omitempty"`
-	CircSupply     string `json:"circ_supply,omitempty"`
-	CircSupplyAPI  string `json:"circ_supply_api,omitempty"`
-	TotalSupply    string `json:"total_supply,omitempty"`
-	TotalSupplyAPI string `json:"total_supply_api,omitempty"`
-	Icon           string `json:"icon,omitempty"`
-	CoinMarketCap  string `json:"coinmarketcap,omitempty"`
-	CoinGecko      string `json:"coingecko,omitempty"`
-	VerificationTx string `json:"verification_tx,omitempty"`
+	Id             string `json:"id"`                         // All
+	OriginChainId  string `json:"origin_chain_id,omitempty"`  // IBC
+	OriginId       string `json:"origin_id,omitempty"`        // IBC
+	Entity         string `json:"entity,omitempty"`           // All (optional)
+	Name           string `json:"name,omitempty"`             // Non-IBC
+	Symbol         string `json:"symbol,omitempty"`           // Non-IBC
+	Decimals       string `json:"decimals,omitempty"`         // Non-IBC
+	Type           string `json:"type,omitempty"`             // All
+	CircSupply     string `json:"circ_supply,omitempty"`      // Non-IBC
+	CircSupplyAPI  string `json:"circ_supply_api,omitempty"`  // Non-IBC
+	TotalSupply    string `json:"total_supply,omitempty"`     // Non-IBC
+	TotalSupplyAPI string `json:"total_supply_api,omitempty"` // Non-IBC
+	Icon           string `json:"icon,omitempty"`             // Non-IBC
+	CoinMarketCap  string `json:"coinmarketcap,omitempty"`    // Non-IBC
+	CoinGecko      string `json:"coingecko,omitempty"`        // Non-IBC
+	VerificationTx string `json:"verification_tx,omitempty"`  // Non-IBC
 }
 
 // IBC assets should maximally have the following fields:
@@ -46,7 +46,9 @@ func (a Asset) HasNoExtraFieldsIbc() bool {
 		len(a.Symbol) == 0 &&
 		len(a.Decimals) == 0 &&
 		len(a.CircSupply) == 0 &&
+		len(a.CircSupplyAPI) == 0 &&
 		len(a.TotalSupply) == 0 &&
+		len(a.TotalSupplyAPI) == 0 &&
 		len(a.Icon) == 0 &&
 		len(a.CoinMarketCap) == 0 &&
 		len(a.CoinGecko) == 0 &&
