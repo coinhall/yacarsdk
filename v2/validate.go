@@ -4,7 +4,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strconv"
-	"strings"
 )
 
 func ValidateAccounts(accounts []Account) (int, error) {
@@ -28,33 +27,32 @@ func ValidateAccounts(accounts []Account) (int, error) {
 
 func ValidateAssets(assets []Asset, entities []Entity) (int, error) {
 	for i, asset := range assets {
-		// IBC assets check
-		if strings.HasPrefix(asset.Id, "ibc/") {
+		switch asset.Type {
+		case "ibc": // IBC assets check
 			if !asset.IsMinimallyPopulatedIbc() {
 				return i, fmt.Errorf("IBC asset ID %s is not minimally populated", asset.Id)
 			}
 
-			if !asset.IbcDoesNotContain() {
+			if !asset.HasNoExtraFieldsIbc() {
 				return i, fmt.Errorf("IBC asset ID %s contains invalid fields", asset.Id)
 			}
 			continue
-		}
+		default:
+			if !asset.IsMinimallyPopulated() {
+				return i, fmt.Errorf("asset ID %s is not minimally populated", asset.Id)
+			}
 
-		// Other assets check
-		if !asset.IsMinimallyPopulated() {
-			return i, fmt.Errorf("asset ID %s is not minimally populated", asset.Id)
-		}
+			if asset.Id == asset.Name {
+				return i, fmt.Errorf("asset name for %s cannot be the asset ID", asset.Id)
+			}
 
-		if asset.Id == asset.Name {
-			return i, fmt.Errorf("asset name for %s cannot be the asset ID", asset.Id)
-		}
+			if asset.Id == asset.Symbol {
+				return i, fmt.Errorf("asset symbol for %s cannot be the asset ID", asset.Id)
+			}
 
-		if asset.Id == asset.Symbol {
-			return i, fmt.Errorf("asset symbol for %s cannot be the asset ID", asset.Id)
-		}
-
-		if len(asset.Symbol) > 20 {
-			return i, fmt.Errorf("asset symbol for %s cannot be longer than 20 characters", asset.Id)
+			if len(asset.Symbol) > 20 {
+				return i, fmt.Errorf("asset symbol for %s cannot be longer than 20 characters", asset.Id)
+			}
 		}
 	}
 

@@ -1,14 +1,14 @@
 package yacarsdk
 
 import (
-	"strings"
-
 	"golang.org/x/text/collate"
 	"golang.org/x/text/language"
 )
 
 type Asset struct {
 	Id             string `json:"id"`
+	OriginChainId  string `json:"origin_chain_id,omitempty"` // Only for IBC assets
+	OriginId       string `json:"origin_id,omitempty"`       // Only for IBC assets
 	Entity         string `json:"entity,omitempty"`
 	Name           string `json:"name,omitempty"`
 	Symbol         string `json:"symbol,omitempty"`
@@ -22,27 +22,30 @@ type Asset struct {
 	CoinMarketCap  string `json:"coinmarketcap,omitempty"`
 	CoinGecko      string `json:"coingecko,omitempty"`
 	VerificationTx string `json:"verification_tx,omitempty"`
-	OriginChainId  string `json:"origin_chain_id,omitempty"` // IBC asset only
 }
 
 // IBC assets should maximally have the following fields:
 //   - Id
 //   - OriginChainId
+//   - OriginId
 //   - Entity (optional)
+//   - CircSupplyAPI (optional)
+//   - TotalSupplyAPI (optional)
 func (a Asset) IsMinimallyPopulatedIbc() bool {
-	return strings.HasPrefix("ibc/", a.Id) && len(a.OriginChainId) > 0
+	return a.Type == "ibc" &&
+		len(a.OriginChainId) > 0 &&
+		len(a.OriginId) > 0
 }
 
-func (a Asset) IbcDoesNotContain() bool {
-	return strings.HasPrefix("ibc/", a.Id) &&
+// Returns false if the asset is not an IBC asset or if it has extra fields
+func (a Asset) HasNoExtraFieldsIbc() bool {
+	return a.Type == "ibc" &&
 		len(a.Name) == 0 &&
 		len(a.Symbol) == 0 &&
 		len(a.Decimals) == 0 &&
 		len(a.Type) == 0 &&
 		len(a.CircSupply) == 0 &&
-		len(a.CircSupplyAPI) == 0 &&
 		len(a.TotalSupply) == 0 &&
-		len(a.TotalSupplyAPI) == 0 &&
 		len(a.Icon) == 0 &&
 		len(a.CoinMarketCap) == 0 &&
 		len(a.CoinGecko) == 0 &&
@@ -50,7 +53,12 @@ func (a Asset) IbcDoesNotContain() bool {
 }
 
 func (a Asset) IsMinimallyPopulated() bool {
-	return len(a.Id) > 0 && len(a.Name) > 0 && len(a.Symbol) > 0 && len(a.Decimals) > 0 && len(a.Type) > 0 && len(a.OriginChainId) == 0
+	return len(a.Id) > 0 &&
+		len(a.Name) > 0 &&
+		len(a.Symbol) > 0 &&
+		len(a.Decimals) > 0 &&
+		len(a.Type) > 0 &&
+		len(a.OriginChainId) == 0
 }
 
 type ByEnforcedAssetOrder []Asset
