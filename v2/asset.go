@@ -29,10 +29,12 @@ type Asset struct {
 //   - OriginChainId
 //   - OriginId
 //   - Entity (optional)
+//   - Type
 //   - CircSupplyAPI (optional)
 //   - TotalSupplyAPI (optional)
 func (a Asset) IsMinimallyPopulatedIbc() bool {
 	return a.Type == "ibc" &&
+		len(a.Id) > 0 &&
 		len(a.OriginChainId) > 0 &&
 		len(a.OriginId) > 0
 }
@@ -43,7 +45,6 @@ func (a Asset) HasNoExtraFieldsIbc() bool {
 		len(a.Name) == 0 &&
 		len(a.Symbol) == 0 &&
 		len(a.Decimals) == 0 &&
-		len(a.Type) == 0 &&
 		len(a.CircSupply) == 0 &&
 		len(a.TotalSupply) == 0 &&
 		len(a.Icon) == 0 &&
