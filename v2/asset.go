@@ -30,8 +30,6 @@ type Asset struct {
 //   - OriginId
 //   - Entity (optional)
 //   - Type
-//   - CircSupplyAPI (optional)
-//   - TotalSupplyAPI (optional)
 func (a Asset) IsMinimallyPopulatedIbc() bool {
 	return a.Type == "ibc" &&
 		len(a.Id) > 0 &&
