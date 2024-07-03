@@ -7,59 +7,38 @@ import (
 
 type Asset struct {
 	Id             string `json:"id"`                         // All
-	OriginChainId  string `json:"origin_chain_id,omitempty"`  // IBC
-	OriginId       string `json:"origin_id,omitempty"`        // IBC
-	Entity         string `json:"entity,omitempty"`           // All (optional)
-	Name           string `json:"name,omitempty"`             // Non-IBC
-	Symbol         string `json:"symbol,omitempty"`           // Non-IBC
-	Decimals       string `json:"decimals,omitempty"`         // Non-IBC
+	OriginChainId  string `json:"origin_chain_id,omitempty"`  // IBC only
+	OriginId       string `json:"origin_id,omitempty"`        // IBC only
+	Entity         string `json:"entity,omitempty"`           // All (Optional)
+	Name           string `json:"name,omitempty"`             // All
+	Symbol         string `json:"symbol,omitempty"`           // All
+	Decimals       string `json:"decimals,omitempty"`         // All
 	Type           string `json:"type,omitempty"`             // All
-	CircSupply     string `json:"circ_supply,omitempty"`      // Non-IBC
-	CircSupplyAPI  string `json:"circ_supply_api,omitempty"`  // Non-IBC
-	TotalSupply    string `json:"total_supply,omitempty"`     // Non-IBC
-	TotalSupplyAPI string `json:"total_supply_api,omitempty"` // Non-IBC
-	Icon           string `json:"icon,omitempty"`             // Non-IBC
-	CoinMarketCap  string `json:"coinmarketcap,omitempty"`    // Non-IBC
-	CoinGecko      string `json:"coingecko,omitempty"`        // Non-IBC
-	VerificationTx string `json:"verification_tx,omitempty"`  // Non-IBC
-}
-
-// IBC assets should maximally have the following fields:
-//   - Id
-//   - OriginChainId
-//   - OriginId
-//   - Entity (optional)
-//   - Type
-func (a Asset) IsMinimallyPopulatedIbc() bool {
-	return a.Type == "ibc" &&
-		len(a.Id) > 0 &&
-		len(a.OriginChainId) > 0 &&
-		len(a.OriginId) > 0
-}
-
-// Returns false if the asset is not an IBC asset or if it has extra fields
-func (a Asset) HasNoExtraFieldsIbc() bool {
-	return a.Type == "ibc" &&
-		len(a.Name) == 0 &&
-		len(a.Symbol) == 0 &&
-		len(a.Decimals) == 0 &&
-		len(a.CircSupply) == 0 &&
-		len(a.CircSupplyAPI) == 0 &&
-		len(a.TotalSupply) == 0 &&
-		len(a.TotalSupplyAPI) == 0 &&
-		len(a.Icon) == 0 &&
-		len(a.CoinMarketCap) == 0 &&
-		len(a.CoinGecko) == 0 &&
-		len(a.VerificationTx) == 0
+	CircSupply     string `json:"circ_supply,omitempty"`      // All
+	CircSupplyAPI  string `json:"circ_supply_api,omitempty"`  // All
+	TotalSupply    string `json:"total_supply,omitempty"`     // All
+	TotalSupplyAPI string `json:"total_supply_api,omitempty"` // All
+	Icon           string `json:"icon,omitempty"`             // All
+	CoinMarketCap  string `json:"coinmarketcap,omitempty"`    // All
+	CoinGecko      string `json:"coingecko,omitempty"`        // All
+	VerificationTx string `json:"verification_tx,omitempty"`  // All
 }
 
 func (a Asset) IsMinimallyPopulated() bool {
-	return len(a.Id) > 0 &&
-		len(a.Name) > 0 &&
-		len(a.Symbol) > 0 &&
-		len(a.Decimals) > 0 &&
-		len(a.Type) > 0 &&
-		len(a.OriginChainId) == 0
+	hasBasicInfo := func(a Asset) bool {
+		return len(a.Id) > 0 &&
+			len(a.Name) > 0 &&
+			len(a.Symbol) > 0 &&
+			len(a.Decimals) > 0 &&
+			len(a.Type) > 0
+	}
+
+	switch a.Type {
+	case "ibc":
+		return hasBasicInfo(a) && len(a.OriginChainId) > 0 && len(a.OriginId) > 0
+	default:
+		return hasBasicInfo(a) && len(a.OriginChainId) == 0 && len(a.OriginId) == 0
+	}
 }
 
 type ByEnforcedAssetOrder []Asset
