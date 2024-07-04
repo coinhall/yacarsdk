@@ -29,12 +29,8 @@ func ValidateAssets(assets []Asset, entities []Entity) (int, error) {
 	for i, asset := range assets {
 		switch asset.Type {
 		case "ibc": // IBC assets check
-			if !asset.IsMinimallyPopulatedIbc() {
+			if !asset.IsMinimallyPopulated() {
 				return i, fmt.Errorf("IBC asset ID %s is not minimally populated", asset.Id)
-			}
-
-			if !asset.HasNoExtraFieldsIbc() {
-				return i, fmt.Errorf("IBC asset ID %s contains invalid fields", asset.Id)
 			}
 			continue
 		default:
