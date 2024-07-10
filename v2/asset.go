@@ -35,7 +35,7 @@ func (a Asset) IsMinimallyPopulated() bool {
 
 	switch a.Type {
 	case "ibc":
-		return hasBasicInfo(a) && len(a.OriginChainId) > 0 && len(a.OriginId) > 0
+		return hasBasicInfo(a) && len(a.OriginChainId) >= 0 && len(a.OriginId) >= 0
 	default:
 		return hasBasicInfo(a) && len(a.OriginChainId) == 0 && len(a.OriginId) == 0
 	}
