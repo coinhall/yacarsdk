@@ -7,6 +7,7 @@ import (
 
 type Asset struct {
 	Id             string `json:"id"`                         // All
+	OriginChain    string `json:"origin_chain,omitempty"`     // IBC only
 	OriginChainId  string `json:"origin_chain_id,omitempty"`  // IBC only
 	OriginId       string `json:"origin_id,omitempty"`        // IBC only
 	Entity         string `json:"entity,omitempty"`           // All (Optional)
